@@ -34,14 +34,14 @@ background-color:rgba(245,245,245,0.5);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>网上书城-搜索</title>
+<title>网上药房-搜索</title>
 </head>
 <body class="bg">
 <div class="container">
 	<div class="row clearfix">
 	<h1 class="text-center page-header" style="color:white;">
 			<span class="glyphicon glyphicon-book"></span>
-				网上书城
+				网上药房
 			</h1>
     <form class="bs-example bs-example-form fix">
             <div class="col-md-6 col-md-offset-3 ">
@@ -58,22 +58,22 @@ background-color:rgba(245,245,245,0.5);
 
             <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上书城</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上药房</a>
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active">
+						<li>
 							 <a href="MainView.jsp">主页</a>
 						</li>
-						<li>
+						<li class="active">
 							 <a href="${APP_PATH}/ToSearch">搜索</a>
 						</li>
 					</ul>
 					<form class="navbar-form navbar-left">
 						<div class="form-group">
-							<input type="text" class="form-control" id="keyword_input"/>
-						</div> <button class="btn btn-default">搜索</button>
+							<input type="text" class="form-control" name="keyword" id="keyword_input"/>
+						</div> <button class="btn btn-default" id="DoSearch">搜索</button>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
@@ -83,15 +83,15 @@ background-color:rgba(245,245,245,0.5);
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的书城<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									 <a href="ShoppingCart.jsp">购物车</a>
+									 <a href="${APP_PATH}/ToCart">购物车</a>
 								</li>
 								<li>
-									 <a href="previeworder.do">用户信息</a>
+									 <a href="${APP_PATH}/ToUserInfo">用户信息</a>
 								</li>								
 								<li class="divider">
 								</li>
 								<li>
-									 <a href="logout.do">注销</a>
+									 <a href="${APP_PATH}/LogOut">注销</a>
 								</li>
 							</ul>
 						</li>
@@ -101,8 +101,7 @@ background-color:rgba(245,245,245,0.5);
                              </c:if>
 						</li>
 					</ul>
-				</div>
-				
+				</div>	
 			</nav>
 </body>
 
@@ -110,6 +109,7 @@ background-color:rgba(245,245,245,0.5);
 
 		//发送ajax请求执行搜索操作
 		$("#search_btn").click(function(){
+			event.preventDefault();//阻止按钮默认的表单提交动作
 			var pn = 1;
 			var keyword = $("#keyword_input").val();
 			$.ajax({
@@ -132,6 +132,35 @@ background-color:rgba(245,245,245,0.5);
 				}
 				
 				
+			});
+		});
+		
+		$("#DoSearch").click(function(){
+			event.preventDefault();//阻止按钮默认的表单提交动作
+			//发送ajax请求执行搜索操作
+				var pn = 1;
+				var keyword = $("#keyword_input").val();
+				$.ajax({
+					url:"${APP_PATH}/DoSearch",
+					type:"post",
+					data:{
+						"keyword":keyword,
+						"pn":pn
+					},
+					
+					success:function(result){
+						alert(result.msg);
+						if(result.code == 200 ){
+							location.href ="${APP_PATH}/ToShopView?keyword="+keyword+"&pn="+pn;
+						}
+						if(result.code == 100 ){
+							alert("搜索失败！");
+						}
+					},
+					
+					error:function(){
+						alert("error!");
+					}
 			});
 		});
 

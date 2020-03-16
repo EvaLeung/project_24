@@ -53,4 +53,8 @@ public class ShopingController {
 		return shoppingService.DoOrder(request);
 	}
 	
+	@RequestMapping("/ToOrderDone")
+	public String ToOrderDone() {
+		return "OrderSuccess";
+	}
 }

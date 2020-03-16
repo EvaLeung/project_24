@@ -1,5 +1,7 @@
 package com.EvaL.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,57 @@ public class LogInService {
 			else {
 				return Message.fail();
 			}
+	}
+
+
+	public Message DoRegister(String username,String password,String cp) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		//用户名密码格式校验
+		if(user.getUsername().length()<=2||user.getUsername().length()>12)
+		{	
+			Message result = Message.fail();
+			result.setMsg("用户名不合法！请重新输入。");
+			return result;
+		}
+		
+		if(user.getPassword().length()<6||user.getPassword().length()>16)
+		{
+			Message result = Message.fail();
+			result.setMsg("密码不合法！请重新输入。");
+			return result;
+		}
+		
+		if(user.getPassword().equals(cp)==false)
+		{
+			Message result = Message.fail();
+			result.setMsg("两次密码输入不一致！请重新输入。");
+			return result;
+		}
+		
+		//用户注册
+		else {
+		UserExample userExample = new UserExample();
+		Criteria criteria = userExample.createCriteria();
+		criteria.andUsernameEqualTo(user.getUsername());
+		List<User> check = userMapper.selectByExample(userExample);
+		
+		//检查用户名是否重复
+        if(check.size()==0) {
+        	userMapper.insertSelective(user);
+        	Message result = Message.success();
+			result.setMsg("注册成功！");
+			return result;
+        	}
+		else
+		{
+			Message result = Message.fail();
+			result.setMsg("用户名已存在！请重新输入。");
+			return result;
+			}
+		
+		}		
 	}
 
 }

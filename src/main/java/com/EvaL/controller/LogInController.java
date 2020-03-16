@@ -46,9 +46,23 @@ public class LogInController {
 		//System.out.print(admin.getAdminUsername());
 		
 		if(loginService.cheackAdmin(admin).getCode()==200) {
-			session.setAttribute("LogInUsername",admin.getAdminUsername());
+			session.setAttribute("AdminUsername",admin.getAdminUsername());
 		}
 		return loginService.cheackAdmin(admin);
+	}
+	
+	
+	@RequestMapping("/ToRegister")
+	public String ToRsgister() {
+		return "Register";
+	}
+	
+	//用户注册
+	@RequestMapping("/DoRegister")
+	@ResponseBody
+	public Message DoRegister(String username,String password,String cPassword) {
+		System.out.println(cPassword);
+		return loginService.DoRegister(username,password,cPassword);
 	}
 	
 	

@@ -33,7 +33,7 @@ margin-top:75px;
 		
 			<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上书城</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上药房</a>
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -41,44 +41,43 @@ margin-top:75px;
 						<li>
 							 <a href="MainView.jsp">主页</a>
 						</li>
-						<li class="active">
-							 <a href="Search.jsp">搜索</a>
+						<li>
+							 <a href="${APP_PATH}/ToSearch">搜索</a>
 						</li>
 					</ul>
-					<form class="navbar-form navbar-left" action="search.do" method="post">
+					<form class="navbar-form navbar-left">
 						<div class="form-group">
-							<input type="text" class="form-control" name="key_word"/>
-						</div> <button type="submit" class="btn btn-default">搜索</button>
+							<input type="text" class="form-control" name="keyword" id="keyword_input"/>
+						</div> <button class="btn btn-default" id="DoSearch">搜索</button>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							 <c:if test="${not empty sessionScope.LogIned}">
-                                <a><c:out value="${sessionScope.username}"/> 您好</a>
+							 <c:if test="${not empty sessionScope.LogInUsername}">
+                                <a><c:out value="${sessionScope.LogInUsername}"/> 您好</a>
                                 <li class="dropdown">
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的书城<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									 <a href="ShoppingCart.jsp">购物车</a>
+									 <a href="${APP_PATH}/ToCart">购物车</a>
 								</li>
 								<li>
-									 <a href="previeworder.do">用户信息</a>
+									 <a href="${APP_PATH}/ToUserInfo">用户信息</a>
 								</li>								
 								<li class="divider">
 								</li>
 								<li>
-									 <a href="logout.do">注销</a>
+									 <a href="${APP_PATH}/LogOut">注销</a>
 								</li>
 							</ul>
 						</li>
                              </c:if>
-                             <c:if test="${empty sessionScope.LogIned}">
-                                 <a href="LogIn.jsp"><c:out value="请登录"/></a>
+                             <c:if test="${empty sessionScope.LogInUsername}">
+                                 <a href="${APP_PATH}/ToLogIn"><c:out value="请登录  "/></a>
                              </c:if>
 						</li>
 					</ul>
-				</div>
-				
-			</nav>			
+				</div>	
+			</nav>		
 			
 		</div>
 	</div>
@@ -89,6 +88,7 @@ margin-top:75px;
 
     //删除单种商品按钮事件
 	$("#del").click(function(){
+		event.preventDefault();//阻止按钮默认的表单提交动作
 		$.ajax({
 			url:"${APP_PATH}/DelCart",
 			data:$("#itemId").val(),
@@ -135,6 +135,7 @@ margin-top:75px;
 	    });
     });
 
+    //构建购物车
     function build_cart(re){
     	var td1 = $("<td></td>").append("商品预览");
     	var td2 = $("<td></td>").append("单价");
@@ -181,6 +182,7 @@ margin-top:75px;
     	
     }
     
+    //构建提示
     function build_tips(){ 	
     	var a = $("<a></a>").addClass("btn").attr("href","MainView.jsp").append("去购物»");
     	var p2 = $("<p></p>").append(a);
@@ -191,6 +193,35 @@ margin-top:75px;
     	var col = $("<div></div").addClass("col-md-12 column").append(row);
     	var mainRow = $("<div></div>").addClass("row clearfix").append(col).appendTo("#mainPage");
     }
+    
+	$("#DoSearch").click(function(){
+		event.preventDefault();//阻止按钮默认的表单提交动作
+		//发送ajax请求执行搜索操作
+			var pn = 1;
+			var keyword = $("#keyword_input").val();
+			$.ajax({
+				url:"${APP_PATH}/DoSearch",
+				type:"post",
+				data:{
+					"keyword":keyword,
+					"pn":pn
+				},
+				
+				success:function(result){
+					alert(result.msg);
+					if(result.code == 200 ){
+						location.href ="${APP_PATH}/ToShopView?keyword="+keyword+"&pn="+pn;
+					}
+					if(result.code == 100 ){
+						alert("搜索失败！");
+					}
+				},
+				
+				error:function(){
+					alert("error!");
+				}
+		});
+	});
 </script>
 
 </html>

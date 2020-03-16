@@ -20,6 +20,14 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
     
+    <!-- 配置多媒体解析器 -->
+    <bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 设定文件上传的最大值 5MB， 5*1024*1024 -->
+		<property name="maxUploadSize" value="5242880"></property>
+	</bean>
+    
     <!-- 两个标准配置 -->
     <!-- 将springMVC不能处理的请求交给tomcat -->
     <mvc:default-servlet-handler/>

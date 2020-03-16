@@ -42,7 +42,7 @@ public class SearchController {
 		return "ItemDetail";
 	}
 	
-	@RequestMapping(value="/ItemDetail",method=RequestMethod.POST)
+	@RequestMapping(value="/ItemDetail")
 	@ResponseBody
 	public Message ItemDetail(Integer itemId) {	
 		return searchService.ItemDetail(itemId);

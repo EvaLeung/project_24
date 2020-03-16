@@ -12,6 +12,9 @@
 .container {
 margin-top:75px;
 }
+.btn{
+white-space: normal;
+}
 </style>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,22 +30,22 @@ margin-top:75px;
 		<div class="col-md-12 column">
 			<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上书城</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">网上药房</a>
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active">
+						<li>
 							 <a href="MainView.jsp">主页</a>
 						</li>
 						<li>
 							 <a href="${APP_PATH}/ToSearch">搜索</a>
 						</li>
 					</ul>
-					<form class="navbar-form navbar-left" action="search.do" method="post">
+					<form class="navbar-form navbar-left">
 						<div class="form-group">
-							<input type="text" class="form-control" name="key_word"/>
-						</div> <button type="submit" class="btn btn-default">搜索</button>
+							<input type="text" class="form-control" name="keyword" id="keyword_input"/>
+						</div> <button class="btn btn-default" id="DoSearch">搜索</button>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
@@ -52,15 +55,15 @@ margin-top:75px;
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的书城<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									 <a href="ShoppingCart.jsp">购物车</a>
+									 <a href="${APP_PATH}/ToCart">购物车</a>
 								</li>
 								<li>
-									 <a href="previeworder.do">用户信息</a>
+									 <a href="${APP_PATH}/ToUserInfo">用户信息</a>
 								</li>								
 								<li class="divider">
 								</li>
 								<li>
-									 <a href="logout.do">注销</a>
+									 <a href="${APP_PATH}/LogOut">注销</a>
 								</li>
 							</ul>
 						</li>
@@ -70,12 +73,13 @@ margin-top:75px;
                              </c:if>
 						</li>
 					</ul>
-				</div>
-				
+				</div>	
 			</nav>
+			
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand">共有${fn:length(requestScope.list)}个搜索结果</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+					 <a class="navbar-brand"></a>
 				</div>			
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
@@ -83,12 +87,12 @@ margin-top:75px;
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">排序<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									 <a href="resultsort.do?type=asc&key_word=${requestScope.key_word}">按价格升序</a>
+									 <a href="#">按价格升序</a>
 								</li>
 								<li class="divider">
 								</li>
 								<li>
-									 <a href="resultsort.do?type=desc&key_word=${requestScope.key_word}">按价格降序</a>
+									 <a href="#">按价格降序</a>
 								</li>
 							</ul>
 						</li>
@@ -97,50 +101,12 @@ margin-top:75px;
 				
 			</nav>
 			
-			<div class="row" id = result_list>
-			
-			<c:forEach var="book" items="${requestScope.list}">
-				<div class="col-md-3">
-				<div class="thumbnail">
-					<img alt="300x300" src="${book.img}"/>
-					<div class="caption">
-						<p>
-						    <form action="showdetailed.do" method="post" name="${book.name}">
-						    <input type='hidden' name='name' value='${book.name}'><!-- 创建隐藏域通过表单使用post方法传递EL表达式中的参数 -->
-							<a class="btn" href='javascript:document.${book.name}.submit();'><c:out value="${book.name}"/></a>
-							</form> 
-					</div>
-				</div>
-			</div>
-            </c:forEach>
-           
-            <div class="row">
-            <div class="col-md-12 column">
-			<ul class="pagination">
-				<li>
-					 <a href="#">Prev</a>
-				</li>
-				<li>
-					 <a href="#">1</a>
-				</li>
-				<li>
-					 <a href="#">2</a>
-				</li>
-				<li>
-					 <a href="#">3</a>
-				</li>
-				<li>
-					 <a href="#">4</a>
-				</li>
-				<li>
-					 <a href="#">5</a>
-				</li>
-				<li>
-					 <a href="#">Next</a>
-				</li>
-			</ul>
-			</div>
-			</div>
+		<div class="row" id = result_list>			  
+            <div class="row"></div>
+		</div>
+		<div class="col-md-12 column">
+            <div class="col-md-6"></div>
+            <div class="col-md-6" id="page_nav_area"></div>
 		</div>
 	</div>
 </div>
@@ -170,12 +136,17 @@ margin-top:75px;
 
 	
 	//加载搜索结果
-	$(function(){
+	$(function(pn){
+		to_page(1);
+	});
+	
+	//分页加载函数
+	function to_page(pn){
 		$.ajax({
 			url:"${APP_PATH}/DoSearch",
 			data:{
 				keyword:getParam("keyword"),
-				pn:getParam("pn")
+				pn:pn
 			},
 			type:"post",
 			
@@ -184,16 +155,19 @@ margin-top:75px;
 				//console.log(result);
 				//解析搜索结果
 				build_result_list(result);
+				build_page_nav(result);
 			},
 			
 			error:function(){
 				alert("error!");
 			}
 		});
-	});
+	}
 	
 	//解析搜索结果并生成页面数据的函数
 	function build_result_list(result){
+		//清空页面元素表格
+		$("#result_list").empty();
 		var items = result.extend.pageInfo.list;
 		$.each(items,function(index,item){
 			
@@ -204,7 +178,8 @@ margin-top:75px;
 			toItemURL.attr('href','${APP_PATH}/ToItem?itemId='+item.itemId);
 			
 			var caption =$("<div></div").addClass("caption");
-			caption.append("<p>").append(toItemURL);
+			caption.append(toItemURL);
+			
 			
 			var thumbnail =$("<div></div").addClass("thumbnail").append(img).append(caption);
 			
@@ -212,8 +187,85 @@ margin-top:75px;
 		});
 	}
 	
+	//构建分页导航条
 	function build_page_nav(result){
+		$("#page_nav_area").empty();
+		var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href","#"));
+		var prePageLi = $("<li></li>").append($("<a></a>").append("«").attr("href","#"));		
 		
+		if(result.extend.pageInfo.hasPreviousPage==false){
+			firstPageLi.addClass("disabled").attr("disabled","disabled");
+			prePageLi.addClass("disabled").attr("disabled","disabled");
+		}
+		else{
+			//为元素添加点击事件
+			firstPageLi.click(function(){
+				toPage(1);
+			});
+			prePageLi.click(function(){
+				toPage(result.extend.pageInfo.pageNum - 1);
+			});
+		}
+		var ul = $("<ul></ul>").addClass("pagination").append(firstPageLi).append(prePageLi);
+		
+		$.each(result.extend.pageInfo.navigatepageNums,function(index,item){
+			var numLi = $("<li></li>").append($("<a></a>").append(item).attr("href","#"));
+			if(result.extend.pageInfo.pageNum==item){
+				numLi.addClass("active");
+			}
+			numLi.click(function(){
+					to_page(item);
+			});
+			ul.append(numLi);
+		});
+		
+		var nextPageLi = $("<li></li>").append($("<a></a>").append("»").attr("href","#"));
+		var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href","#"));
+		if(result.extend.pageInfo.hasNextPage==false){
+			nextPageLi.addClass("disabled").attr("disabled","disabled");
+			lastPageLi.addClass("disabled").attr("disabled","disabled");
+		}
+		else{
+			//为元素添加点击事件
+			nextPageLi.click(function(){
+				to_page(result.extend.pageInfo.pageNum + 1);
+			});
+			lastPageLi.click(function(){
+				toPage(result.extend.pageInfo.pages);
+			});
+		}
+		ul.append(nextPageLi).append(lastPageLi);
+		
+		var bavEle = $("<nav></nav>").addClass("nav nav-pills pull-right").append(ul).appendTo("#page_nav_area");
 	}
+	
+	$("#DoSearch").click(function(){
+		event.preventDefault();//阻止按钮默认的表单提交动作
+		//发送ajax请求执行搜索操作
+			var pn = 1;
+			var keyword = $("#keyword_input").val();
+			$.ajax({
+				url:"${APP_PATH}/DoSearch",
+				type:"post",
+				data:{
+					"keyword":keyword,
+					"pn":pn
+				},
+				
+				success:function(result){
+					alert(result.msg);
+					if(result.code == 200 ){
+						location.href ="${APP_PATH}/ToShopView?keyword="+keyword+"&pn="+pn;
+					}
+					if(result.code == 100 ){
+						alert("搜索失败！");
+					}
+				},
+				
+				error:function(){
+					alert("error!");
+				}
+		});
+	});
 </script>
 </html>
